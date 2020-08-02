@@ -1,5 +1,6 @@
 package com.pratap.corejava.reflection;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -36,22 +37,22 @@ public class Test {
 			Object calcObj2 = constructor2.newInstance(5, 5);
 			System.out.println(calcObj2);
 			
-			Method sumObject = myClass.getMethod("sum", int.class, int.class);
+			Method sumMethod = myClass.getMethod("sum", int.class, int.class);
 
-			Object invoke = sumObject.invoke(calcObj, 5, 5);
+			int invokeSumMethod = (int) sumMethod.invoke(calcObj2, 5, 5);
 			
-			Method getxMethod = myClass.getMethod("getX", null);
-			Object invoke2 = getxMethod.invoke(calcObj2, null);
+			System.out.println(invokeSumMethod);
 			
-			System.out.println(invoke2);
+			Method getNum1Method = myClass.getMethod("getNum1", null);
+			int resultgetNum1 = (int) getNum1Method.invoke(calcObj2, null);
 			
-			System.out.println(invoke);
+			Annotation[] annotations = myClass.getAnnotations();
 			
-			// access private field and set that value
-			Field numField1 = myClass.getDeclaredField("x");
-			numField1.setAccessible(true);
-			numField1.set(calcObj, 80);
-			System.out.println(invoke2);
+			System.out.println(Arrays.toString(annotations));
+			
+			MyAnnotation annotation = (MyAnnotation) annotations[0];
+			
+			System.out.println(annotation.value1()+" - "+annotation.value2());
 			
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -71,9 +72,6 @@ public class Test {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
